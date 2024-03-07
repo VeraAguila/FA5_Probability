@@ -1,0 +1,214 @@
+---
+title: "Formative Assessment 5"
+author: "Vera Aguila and Paul Joaquin M. Delos Santos"
+date: "2024-03-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 6
+
+An email message can travel through one of three server routes. The percentage of errors in each of the servers and the percentage of messages that travel through each route are shown in the following table. Assume that the servers are independent.
+
+<div style="text-align:center;">
+Server |  Percentage of Messages |Percentage of Errors |
+-------|------------------------ |-------------------- | 
+   1   |        40               |         1           |   
+   2   |        25               |         2           |   
+   3   |        35               |        1.5          |
+</div>
+
+Given:
+
+* percentage of messages that travel through server 1 = P(M~1~) = 0.4
+* percentage of messages that travel through server 2 = P(M~2~) = 0.25
+* percentage of messages that travel through server 3 = P(M~3~) = 0.35
+<br><br>
+
+* percentage of errors in server 1 = P(E~1~) = 0.01
+* percentage of errors in server 2 = P(E~2~) = 0.02
+* percentage of errors in server 3 = P(E~3~) = 0.015
+<br><br>
+
+(a) **What is the probability of receiving an email containing an error?**
+
+This would be the total error for all the server:
+
+E = (E ∩ S~1~) ∪ (E ∩ S~2~) ∪ (E ∩ S~3~) 
+
+P(E) = P(E ∩ S~1~) + P(E ∩ S~2~) + P(E ∩ S~3~)
+
+P(E) = P(S~1~) P(E|S~1~) + P(S~2~) P(E|S~2~) + P(S~3~) P(E|S~3~) 
+
+Therefore, 
+
+```{r}
+PM1 <- 0.4
+PM2 <- 0.25
+PM3 <- 0.35
+PE1 <- 0.01
+PE2 <- 0.02
+PE3 <- 0.015
+
+PE <- (PM1*PE1) + (PM2*PE2) + (PM3*PE3) 
+```
+
+P(E) = `r PE`
+
+<mark>The probability of receiving an email containing an error is `r PE*100`%.</mark>
+
+<br><br>
+
+(b) **What is the probability that a message will arrive without error?**
+
+We already have the probability of receiving an email containing an error. So, the probability of receiving a message without error is the complement of P(E).
+
+P($\overline{E}$) = 1 - P(E)
+
+Therefore, 
+
+```{r}
+PCE <- 1-PE
+```
+
+P($\overline{E}$) = `r PCE`
+
+<mark>The probability that a message will arrive without error is `r PCE*100`%.</mark>
+
+
+<br><br>
+
+(c) **If a message arrives without error, what is the probability that it was sent through server 1?**
+
+Using the Baye's Theorem,
+
+$P(M_1|\overline{E}) = \frac{P(M_1) P(\overline{E}|M_1)}{P(\overline{E})}$
+
+We know that P(M~1~) = 0.4 and P($\overline{E}$) = `r PCE`
+
+P($\overline{E}$|M~1~) is the complement of probability of receiving message with error in server 1. So, 
+
+P($\overline{E}$|M~1~) = 1 - P(E|M~1~)
+
+Therefore, 
+
+```{r}
+PCE1 <- 1 - PE1
+```
+P($\overline{E}$|M~1~) = `r PCE1`
+
+Now, we can solve for P(M~1~|$\overline{E}$)
+
+```{r}
+PM1CE <- (PM1*PCE1)/PCE
+```
+P(M~1~|$\overline{E}$) = `r PM1CE`
+
+<mark>The probability that message arrives without error through server 1 is `r PM1CE*100`%.</mark>
+
+<br><br>
+
+## Problem 9
+ A software company surveyed managers to determine the probability that they would buy a new graphics package that includes three-dimensional graphics. About 20% of office managers were certain that they would not buy the package, 70% claimed that they would buy, and the others were undecided. Of those who said that they would not buy the package, only 10% said that they were interested in upgrading their computer hardware. Of those interested in buying the graphics package, 40% were also interested in upgrading their computer hardware. Of the undecided, 20% were interested in upgrading their computer hardware.
+
+Let:
+
+* A denote the intention of not buying
+* B the intention of buying
+* C the undecided
+* G the intention of upgrading the computer hardware
+<br><br>
+* P(A) = 0.2
+* P(B) = 0.7
+* P(C) = 1 - P(A) - P(B) = 1 - 0.2 - 0.7 = 0.1
+* P(G∣A) = 0.1 
+* P(G∣B) = 0.4 
+* P(G|C) = 0.2
+```{r}
+PA <- 0.2
+PB <- 0.7
+PC <- 1 - PA - PB 
+barplot(c(PA, PB, PC), names.arg = c("Not Buying", "Buying", "Undecided"), col = "lightblue", main = "Intentions of Managers To Buy", ylab = "Probability", ylim = c(0, 1))
+```
+
+ (a) **Calculate the probability that a manager chosen at random will not upgrade the computer hardware $(P(\overline{G}))$.**
+
+We will look first on the probability of choosing a manager at random that will upgrade the computer hardware.
+
+P(G) = P(A) P(G|A) + P(B) P(G|B) + P(C) P(G|C)
+
+```{r}
+PGA <- 0.1  
+PGB <- 0.4  
+PGC <- 0.2  
+
+PG <- (PA*PGA) + (PB*PGB) + (PC*PGC)
+```
+
+So, P(G) = `r PG`
+
+TO find the $(P(\overline{G}))$, let's find the complement of P(G),
+
+$(P(\overline{G}))$ = 1 - P(G)
+```{r}
+PCG <- 1 - PG
+```
+
+$(P(\overline{G}))$ = `r PCG`
+
+<mark>The probability that a manager chosen at random will not upgrade the computer hardware is `r PCG*100`%.</mark><br><br>
+
+ (b) **Explain what is meant by the posterior probability of B given G, P(B|G).**
+ 
+
+$P(B|G) = \frac{{P(B) \times P(G|B)}}{{P(G)}}$
+
+```{r, echo=FALSE}
+P_B_G <- (PB * PGB) / PG
+
+barplot(c(1 - P_B_G, P_B_G), names.arg = c("Not Buying", "Buying"), col = "lightcoral", main = "Intentions of Buying given Computer Hardware Upgrade", ylab = "Probability", ylim = c(0, 1))
+```
+
+
+ 
+ (c) **Construct a tree diagram and use it to calculate the following probabilities: $P(G), P(B|G), P(B|\overline{G}), P(C|G), P(\overline{C}|\overline{G})$.**
+
+
+<br><br>
+
+## Problem 13
+ A malicious spyware can infect a computer system though the Internet or through email. The spyware comes through the Internet 70% of the time and 30% of the time, it gets in through email. If it enters via the Internet the anti-virus detector will detect it with probability 0.6, and via email, it is detected with probability 0.8.
+
+(a) **What is the probability that this spyware infects the system?**
+
+P(G) = P(A) P(G|A) + P(B) P(G|B)
+
+```{r}
+P_Internet <- 0.7
+P_Email <- 0.3
+P_Infection_Internet <- 0.6
+P_Infection_Email <- 0.8
+
+P_Infection <- (P_Internet * P_Infection_Internet) + (P_Email * P_Infection_Email)
+
+barplot(c(P_Internet, P_Email), names.arg = c("Internet", "Email"), col = "skyblue", main = "Source of Spyware", ylab = "Probability", ylim = c(0, 1))
+```
+<br><mark>The probability that this spyware infects the system is `r P_Infection*100`%.</mark>
+
+<br><br>
+
+(b) **If the spyware is detected, what is the probability that it came through the Internet?**
+
+The probability that the spyware came through the Internet given that it is detected can be calculated using Bayes' Theorem
+
+```{r}
+P_Detection <- P_Internet * P_Infection_Internet + P_Email * P_Infection_Email
+
+P_Internet_Detection <- (P_Infection_Internet * P_Internet) / P_Detection
+
+barplot(c(1 - P_Internet_Detection, P_Internet_Detection), names.arg = c("Not Internet", "Internet"), col = "lightcoral", main = "Source of Spyware given Detection", ylab = "Probability", ylim = c(0, 1))
+```
+<br><mark>If the spyware is detected, the probability that it came through the Internet is `r P_Internet_Detection*100`%.</mark>
